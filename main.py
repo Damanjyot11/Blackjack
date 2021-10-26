@@ -58,49 +58,74 @@
 #Hint 13: Create a function called compare() and pass in the user_score and computer_score. If the computer and user both have the same score, then it's a draw. If the computer has a blackjack (0), then the user loses. If the user has a blackjack (0), then the user wins. If the user_score is over 21, then the user loses. If the computer_score is over 21, then the computer loses. If none of the above, then the player with the highest score wins.
 
 #Hint 14: Ask the user if they want to restart the game. If they answer yes, clear the console and start a new game of blackjack and show the logo from art.py.
-
+from replit import clear
 import art
-import sys
 import random
 
 def result(player_cards,computer_cards):
-    print(f"your final hand : {player_cards}, final score : {sum(player_cards)}")
-    print(f"Computer's final hand : {player_cards}, final score : {sum(computer_cards)}")
+    print(f"Your final hand : {player_cards}, final score : {sum(player_cards)}")
+    print(f"Computer's final hand : {computer_cards}, final score : {sum(computer_cards)}")
 
-choice = input("Do you want to play a game of Blackjack? Type 'y' or 'n' : ").lower()
+def current_score(player_cards,computer_cards):
+    print(f"Your cards : {player_cards}, current score : {sum(player_cards)}")
+    print(f"Computer's first card : {computer_cards}")
 
-if choice == 'n':
-    sys.exit()
+def Blackjack():
+    clear()
+    print(art.logo)
 
-print(art.logo)
+    cards = [11,2,3,4,5,6,7,8,9,10,10,10,10]
+    player_cards = []
+    computer_cards = []
 
-cards = [11,2,3,4,5,6,7,8,9,10,10,10,10]
+    player_cards.append(random.choice(cards))
+    player_cards.append(random.choice(cards))
+    computer_cards.append(random.choice(cards))
 
-player_cards = []
-computer_cards = []
+    player_score = player_cards[0] + player_cards[1]
+    computer_score = computer_cards[0]
 
-player_cards.appned(random.choice(cards))
-player_cards.appned(random.choice(cards))
-computer_cards.appned(random.choice(cards))
+    current_score(player_cards,computer_cards)
 
-player_score = player_cards[0] + player_cards[1]
-computer_score = computer_cards[0]
+    while True:
+        choice = input("Type 'y' to get another card, type 'n' to pass : ").lower()
 
-print(f"your cards: [{player_cards[0]}, {player_cards[1]}],current score = {player_score}")
-print(f"Computer's first card: {computer_cards[0]}")
+        if choice == "n":
+            while computer_score < 17:
+                card = random.choice(cards)
+                computer_cards.append(card)
+                computer_score += card
 
-choice = input("Type 'y' to get another card, type 'n' to pass").lower()
+            result(player_cards,computer_cards)
+            if computer_score > 21:
+                print("You Win !!")
+            elif player_score > computer_score:
+                print("You Win !!")
+            elif player_score < computer_score:
+                print("You Lose !!")
+            break
+        else:
+            card = random.choice(cards)
+            player_cards.append(card)
+            player_score += card
 
-if choice == "n":
-    while computer_score < 17:
-        card = random.choice(cards)
-        nums.append(card)
-        computer_score += card
+            if player_score <= 21:
+                current_score(player_cards,computer_cards)
+                continue;
+            else:
+                while computer_score < 17:
+                    card = random.choice(cards)
+                    computer_cards.append(card)
+                    computer_score += card
+                    
+                result(player_cards,computer_cards)
+                print("You went over. You lose")
+                break
 
-    if computer_score > 21:
-        print("You Win !!")
-    elif player_score > computer_score:
-        print("You Win !!")
-    elif player_score < computer_score:
-        print("You Lose !!")
+    choice = input("Do you want to play a game of Blackjack? Type 'y' or 'n' : ").lower()
+    if choice == 'n':
+        return
+    else:
+        Blackjack()
 
+Blackjack()
